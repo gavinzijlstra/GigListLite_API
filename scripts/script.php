@@ -15,7 +15,6 @@ echo "Start backup", PHP_EOL;
 // Get Generic Variables
 $doelMap = '/var/www/clients/client43128/web95203/giglistlite/backups/';
 $datum = date('Ymd');
-$doelBestand = $doelMap . 'backup-' . $datum . '.dat';
 
 // Create Backup-map if not exists
 if (!is_dir($doelMap)) {
@@ -25,7 +24,9 @@ if (!is_dir($doelMap)) {
 // Backup the .dat file for each known token.
 foreach ($tokens as $token) {
     $bron = "/var/www/clients/client43128/web95203/giglistlite/data/giglist_${token}.dat";
+    $doelBestand = $doelMap . 'backup_' . $datum . '_' . $token . '.dat';
     $logger->addLog("Copy [${bron}] to [${doelBestand}]");
+    echo $doelBestand,PHP_EOL;
     copy($bron, $doelBestand);
 }
 
