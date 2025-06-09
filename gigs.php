@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $key = $gigs->getUniqueKey();
     $line = $gigs->jsonNodeToLine($key, json_decode($input, true));
     // Voeg een newline toe vóór de nieuwe regel
+    $line = str_replace("\n", "\\n", $line); // escape enters
     $lineNewLine = PHP_EOL . $line;
     file_put_contents($path, $lineNewLine, FILE_APPEND);
     echo json_encode(['_id' => $key]);

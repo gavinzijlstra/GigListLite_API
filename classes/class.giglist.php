@@ -12,7 +12,7 @@ class GigList {
 
     public function getJson(){
         $file = $this->file;
-        $json = $file->getJson();
+        $json = $file->getJson();        
         $gigs = json_decode($json, true); 
         
         // Sorteer op datum (meest recent bovenaan)
@@ -23,7 +23,11 @@ class GigList {
             // Vergelijk aflopend (nieuwste eerst)
             return $datumB <=> $datumA;
         });
-        return json_encode($gigs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        
+        $json = json_encode($gigs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        // Zet "\\n" terug naar "\n"
+        $json = str_replace('\\\\n', '\\n', $json);
+        return $json;
     }
 
     function getUniqueKey() {
@@ -103,12 +107,13 @@ class GigList {
 
         foreach ($data as $node) {
             echo "Update : ". $node['_id'] . PHP_EOL;
-            if ($updateNode['_id'] === $node['_id']) {
+            if ($updateNode['_id'] === $node['_id']) {                            
+                // Zet "\n" om naar "\\n"
+                $updateNode = str_replace("\n", "\\n", $updateNode);
                 $line = $this->jsonNodeToLine($updateNode['_id'], $updateNode);            
             } else {
                 $line = $this->jsonNodeToLine($node['_id'], $node);
-            }
-            
+            }            
             $line = $line . PHP_EOL;
             file_put_contents($file->getPath(), $line, FILE_APPEND); // Add lines to file
         }
