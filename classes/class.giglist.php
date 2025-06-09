@@ -107,13 +107,13 @@ class GigList {
 
         foreach ($data as $node) {
             echo "Update : ". $node['_id'] . PHP_EOL;
-            if ($updateNode['_id'] === $node['_id']) {                            
-                // Zet "\n" om naar "\\n"
-                $updateNode = str_replace("\n", "\\n", $updateNode);
+            if ($updateNode['_id'] === $node['_id']) {                                            
                 $line = $this->jsonNodeToLine($updateNode['_id'], $updateNode);            
             } else {
                 $line = $this->jsonNodeToLine($node['_id'], $node);
-            }            
+            }
+            // Zet "\n" om naar "\\n"
+            $line = str_replace("\n", "\\n", $line);
             $line = $line . PHP_EOL;
             file_put_contents($file->getPath(), $line, FILE_APPEND); // Add lines to file
         }
